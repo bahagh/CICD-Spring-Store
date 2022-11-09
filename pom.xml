@@ -14,10 +14,15 @@
 	<name>tpAchatProject</name>
 	<description>tpAchatProject</description>
 	<distributionManagement>
-      <repository>
-          <id>deploymentRepo</id>
-          <url>http://host.docker.internal:8081/repository/maven-releases/</url>
-      </repository>
+	<snapshotRepository>
+		<id>nexus-snapshots</id>
+		 <url>http://http://192.168.1.123:8081/repository/maven-snapshots/</url>
+	 </snapshotRepository>
+       
+	<repository>
+	 	<id>nexus-releases</id>   
+        	 <url>http://http://http://192.168.1.123:8081//repository/maven-releases/</url>
+	</repository>
     </distributionManagement>
 	<properties>
 		<java.version>1.8</java.version>
