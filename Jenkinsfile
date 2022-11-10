@@ -4,14 +4,68 @@ pipeline {
 
 
     stages {
-         stage ('GIT Checkout') {
+        stage ('Git') {
             steps {
-               echo "Getting Project from Git";
-                git branch: "main",
-                    url: "https://github.com/bahagh/tpAchatProject.git";
-                    
+               echo "Getting Project from Git"; 
+		git branch : 'main',
+               url: 'https://github.com/bahagh/tpAchatProject.git', 
+		credentialsId: 'first pipeline';
+           }
+        }
+	
+	stage("Build") {
+            steps {
+                sh "mvn -version"
+                sh "mvn clean"
+                sh 'mvn compile'
+		sh 'mvn package'
+            }
+        }
+
+	stage("Unit Testing") {
+            steps {
+                echo "NOT_YET lancer les Tests unitaire avec JUnit et Mockito."
+            }
+        }
+
+	stage("SRC Analysis Testing") {
+            steps {
+                echo "mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=root"
             }
         }
 	
+        stage("Build Docker image") {
+            steps {
+                sh "docker build -t oussamahosni/projetdevops-backend . "
+            }
+        }
+	
+        stage('Deploy Artifact to Nexus') {
+             steps {
+		echo "nehsbou rwehna aamlana e nexus"
 	}
+        }
+
+        stage("Deploy Dokcer Image to DockerHub(private registry)") {
+            steps {
+	    	echo "docker login -u username -p pw"
+                echo "docker push oussamahosni/projetdevops-backend"
+            }
+        }
+	
+	stage("Start Containers") {
+            steps {
+                echo "NOT8YET lancer l'application TpAchat et la base de données."
+		sh "docker-compose up -d"
+            }
+        }	
+      
+    }
+   
+    post {
+        always {
+            cleanWs()
+        }
+    }
+    
 }
