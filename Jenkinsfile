@@ -34,7 +34,7 @@ pipeline {
 	
         stage("Build Docker image") {
             steps {
-                sh "docker build -t oussamahosni/projetdevops-backend . "
+                sh "docker build -t . "
             }
         }
 	
@@ -47,7 +47,7 @@ pipeline {
         stage("Deploy Dokcer Image to DockerHub(private registry)") {
             steps {
 	    	echo "docker login -u username -p pw"
-                echo "docker push oussamahosni/projetdevops-backend"
+                
             }
         }
 	
