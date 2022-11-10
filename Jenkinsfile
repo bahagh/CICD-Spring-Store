@@ -4,28 +4,13 @@ pipeline {
 
 
     stages {
-        stage ('GIT') {
+         stage ('GIT Checkout') {
             steps {
                echo "Getting Project from Git";
                 git branch: "main",
-                    url: "https://github.com/bahagh/tpAchatProject.gitr",
+                    url: "https://github.com/bahagh/tpAchatProject.git",
                     credentialsId: "first pipeline";
             }
         }
-       
-        stage("Build") {
-            steps {
-                sh "mvn -version"
-                bat "mvn clean package -DskipTests"
-            }
-        }
-
-        
-   }
-    post {
-        always {
-            cleanWs()
-        }
-    }
-    
-}
+	
+	}
