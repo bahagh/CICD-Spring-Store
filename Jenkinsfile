@@ -34,7 +34,7 @@ pipeline {
 	
         stage("Build Docker image") {
             steps {
-                sh "docker build -t tpachat . "
+                sh "docker build -t bahagh/projetdevops . "
             }
         }
 	
