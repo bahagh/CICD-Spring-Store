@@ -34,7 +34,7 @@ pipeline {
 	
         stage("Build Docker image") {
             steps {
-                sh "docker build -t projetdevops . "
+                sh "docker build -t oussamahosni/projetdevops-backend . "
             }
         }
 	
