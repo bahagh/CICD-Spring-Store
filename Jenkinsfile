@@ -16,19 +16,19 @@ pipeline {
         stage("Build") {
             steps {
                 sh "mvn -version"
-                bat "mvn clean package -DskipTests"
+                sh "mvn clean package"
             }
         }
 
         stage("Sonar") {
             steps {
-                bat "mvn sonar:sonar"
+                sh "mvn sonar:sonar"
             }
         }
         
         stage("SRC Analysis Testing") {
             steps {
-                bat "mvn sonar:sonar"
+                sh "mvn sonar:sonar"
             }
         }
         
