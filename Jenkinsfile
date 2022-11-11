@@ -4,60 +4,51 @@ pipeline {
 
 
     stages {
-        stage ('Git') {
+        stage ('GIT') {
             steps {
                echo "Getting Project from Git"; 
-		git branch : 'main',
-               url: 'https://github.com/bahagh/tpAchatProject.git', 
-		credentialsId: 'tpachat';
-           }
+                git branch: "main", 
+                    url: "https://github.com/bahagh/tpAchatProject.git",
+		    credentialsId: "tpachat";
+            }
         }
-	
-	stage("Build") {
+       
+        stage("Build") {
             steps {
-                sh "mvn clean package"
-                
+                sh "mvn -version"
+                bat "mvn clean package -DskipTests"
             }
         }
 
-	stage("Unit Testing") {
+        stage("Sonar") {
             steps {
-                echo "NOT_YET lancer les Tests unitaire avec JUnit et Mockito."
+                bat "mvn sonar:sonar"
             }
         }
-
-	stage("SRC Analysis Testing") {
+        
+        stage("SRC Analysis Testing") {
             steps {
-                echo "mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=root"
+                bat "mvn sonar:sonar"
             }
         }
-	
+        
         stage("Build Docker image") {
             steps {
-                sh "docker build -t bahagh/projetdevops . "
+                sh "..............."
             }
-        }
-	
-        stage('Deploy Artifact to Nexus') {
-             steps {
-		echo "nehsbou rwehna aamlana e nexus"
-	}
         }
 
-        stage("Deploy Dokcer Image to DockerHub(private registry)") {
+        stage("Deploy Artifact to private registry") {
             steps {
-	    	echo "docker login -u username -p pw"
-                
+                sh "..............."
             }
         }
-	
-	stage("Start Containers") {
+
+        stage("Deploy Dokcer Image to private registry") {
             steps {
-                echo "NOT8YET lancer l'application TpAchat et la base de données."
-		sh "docker-compose up -d"
+                sh "..............."
             }
-        }	
-      
+        }
     }
    
     post {
