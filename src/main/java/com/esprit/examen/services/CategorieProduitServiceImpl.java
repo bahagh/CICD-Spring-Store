@@ -2,12 +2,14 @@ package com.esprit.examen.services;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.esprit.examen.entities.CategorieProduit;
 import com.esprit.examen.repositories.CategorieProduitRepository;
 
 @Service
+@Slf4j
 public class CategorieProduitServiceImpl implements ICategorieProduitService {
 
 	
@@ -34,13 +36,13 @@ public class CategorieProduitServiceImpl implements ICategorieProduitService {
 	@Override
 	public CategorieProduit updateCategorieProduit(CategorieProduit cp) {
 		categorieProduitRepository.save(cp);
+		log.info("update");
 		return cp;
 	}
 
 	@Override
 	public CategorieProduit retrieveCategorieProduit(Long id) {
-		CategorieProduit categorieProduit = categorieProduitRepository.findById(id).orElse(null);
-		return categorieProduit;
+		return categorieProduitRepository.findById(id).orElse(null);
 	}
 
 }
