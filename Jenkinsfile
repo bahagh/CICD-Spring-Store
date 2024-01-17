@@ -1,60 +1,55 @@
 pipeline {
-
     agent any
-
+    environment {
+        registry = "bahagh/achat"
+        registryCredential = 'devops'
+        dockerImage = ''
+    }
 
     stages {
-        stage ('GIT') {
+        stage('GIT CHECKOUT') {
             steps {
-               echo "Getting Project from Git"; 
-                git branch: "main", 
-                    url: "https://github.com/bahagh/tpAchatProject.git",
-		    credentialsId: "tpachat";
+                git branch: 'operateur', url: 'https://github.com/bahagh/tpAchatProject.git',
+                credentialsId: "git_token";
             }
         }
-       
-        stage("Build") {
+         stage('CLEAN PCKG') {
             steps {
-                sh "mvn -version"
-                sh "mvn clean package"
-            }
-        }
-
-        stage("Sonar") {
-            steps {
-                sh "mvn sonar:sonar"
+                sh 'mvn clean package -DskipTests'
             }
         }
         
-        stage("SRC Analysis Testing") {
+         stage('SRC ANALYSIS TESTING ( SONARQUBE )') {
             steps {
-                sh "mvn sonar:sonar"
+                sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=sonar'
+            }
+        }
+          stage('UNIT TESTING ( JUINT/MOCKITO )') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+         stage('DEPLOYING ARTIFACT TO NEXUS') {
+            steps {
+                sh 'mvn deploy -DskipTests'
+            }
+        }
+        stage('BUILDING DOCKER IMAGE') {
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
             }
         }
         
-        stage("Build Docker image") {
+          stage('DEPLOYING DOCKER IMAGE ( DOCKERHUB ) ') {
             steps {
-                sh "..............."
-            }
-        }
-
-        stage("Deploy Artifact to private registry") {
-            steps {
-                sh "..............."
-            }
-        }
-
-        stage("Deploy Dokcer Image to private registry") {
-            steps {
-                sh "..............."
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
             }
         }
     }
-   
-    post {
-        always {
-            cleanWs()
-        }
-    }
-    
 }
